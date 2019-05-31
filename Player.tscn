@@ -1,0 +1,70 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://dodge_assets/art/playerGrey_walk1.png" type="Texture" id=2]
+[ext_resource path="res://dodge_assets/art/playerGrey_walk2.png" type="Texture" id=3]
+[ext_resource path="res://dodge_assets/art/playerGrey_up1.png" type="Texture" id=4]
+[ext_resource path="res://dodge_assets/art/playerGrey_up2.png" type="Texture" id=5]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "right",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "up",
+"speed": 2.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 58.7165
+height = 22.9564
+
+[sub_resource type="Gradient" id=8]
+colors = PoolColorArray( 1, 0.996094, 0.996094, 0.815686, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0.00416574, 0.4703 ), 0.0, 0.0, 0, 0, Vector2( 0.997434, 0.0798 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+angular_velocity = 0.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 9 )
+
+[node name="Player" type="Area2D"]
+position = Vector2( 241.663, 218.218 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+SPEED = 400
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 1 )
+animation = "right"
+speed_scale = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.67023, -1.6702 )
+scale = Vector2( 0.5, 0.5 )
+shape = SubResource( 2 )
+
+[node name="Trail" type="Particles2D" parent="."]
+local_coords = false
+process_material = SubResource( 7 )
+texture = ExtResource( 4 )
+[connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
